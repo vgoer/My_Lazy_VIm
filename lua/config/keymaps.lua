@@ -60,3 +60,145 @@ map("o", "n", "'Nn'[v:searchforward]", { expr = true, desc = "下一个搜索结
 map("n", "N", "'nN'[v:searchforward].'zv'", { expr = true, desc = "上一个搜索结果" })
 map("x", "N", "'nN'[v:searchforward]", { expr = true, desc = "上一个搜索结果" })
 map("o", "N", "'nN'[v:searchforward]", { expr = true, desc = "上一个搜索结果" })
+
+-- 添加撤销断点
+map("i", ",", ",<c-g>u")
+map("i", ".", ".<c-g>u")
+map("i", ";", ";<c-g>u")
+
+-- 保存文件
+map({ "i", "x", "n", "s" }, "<C-s>", "<cmd>w<cr><esc>", { desc = "保存文件" })
+
+-- 关键字命令
+map("n", "<leader>K", "<cmd>norm! K<cr>", { desc = "关键字命令" })
+
+-- 更好的缩进
+map("v", "<", "<gv")
+map("v", ">", ">gv")
+
+-- 注释
+map("n", "gco", "o<esc>Vcx<esc><cmd>normal gcc<cr>fxa<bs>", { desc = "在下方添加注释" })
+map("n", "gcO", "O<esc>Vcx<esc><cmd>normal gcc<cr>fxa<bs>", { desc = "在上方添加注释" })
+
+-- Lazy
+map("n", "<leader>l", "<cmd>Lazy<cr>", { desc = "Lazy配置" })
+
+-- 新文件
+map("n", "<leader>fn", "<cmd>enew<cr>", { desc = "新建文件" })
+
+map("n", "<leader>xl", "<cmd>lopen<cr>", { desc = "位置列表" })
+map("n", "<leader>xq", "<cmd>copen<cr>", { desc = "快速修复列表" })
+map("n", "[q", vim.cmd.cprev, { desc = "上一个快速修复" })
+map("n", "]q", vim.cmd.cnext, { desc = "下一个快速修复" })
+
+-- 格式化
+map({ "n", "v" }, "<leader>cf", function()
+  LazyVim.format({ force = true })
+end, { desc = "格式化" })
+
+-- 诊断
+local diagnostic_goto = function(next, severity)
+  local go = next and vim.diagnostic.goto_next or vim.diagnostic.goto_prev
+  severity = severity and vim.diagnostic.severity[severity] or nil
+  return function()
+    go({ severity = severity })
+  end
+end
+map("n", "<leader>cd", vim.diagnostic.open_float, { desc = "行诊断" })
+map("n", "]d", diagnostic_goto(true), { desc = "下一个诊断" })
+map("n", "[d", diagnostic_goto(false), { desc = "上一个诊断" })
+map("n", "]e", diagnostic_goto(true, "ERROR"), { desc = "下一个错误" })
+map("n", "[e", diagnostic_goto(false, "ERROR"), { desc = "上一个错误" })
+map("n", "]w", diagnostic_goto(true, "WARN"), { desc = "下一个警告" })
+map("n", "[w", diagnostic_goto(false, "WARN"), { desc = "上一个警告" })
+
+-- 切换选项
+LazyVim.toggle.map("<leader>uf", LazyVim.toggle.format(), { desc = "切换格式化" })
+LazyVim.toggle.map("<leader>uF", LazyVim.toggle.format(true), { desc = "强制格式化" })
+LazyVim.toggle.map("<leader>us", LazyVim.toggle("spell", { name = "拼写检查" }))
+LazyVim.toggle.map("<leader>uw", LazyVim.toggle("wrap", { name = "自动换行" }))
+LazyVim.toggle.map("<leader>uL", LazyVim.toggle("relativenumber", { name = "相对行号" }))
+LazyVim.toggle.map("<leader>ud", LazyVim.toggle.diagnostics, { desc = "切换诊断" })
+LazyVim.toggle.map("<leader>ul", LazyVim.toggle.number, { desc = "切换行号" })
+LazyVim.toggle.map(
+  "<leader>uc",
+  LazyVim.toggle(
+    "conceallevel",
+    { values = { 0, vim.o.conceallevel > 0 and vim.o.conceallevel or 2 }, desc = "切换折叠级别" }
+  )
+)
+LazyVim.toggle.map("<leader>uT", LazyVim.toggle.treesitter, { desc = "切换 Tree-sitter" })
+LazyVim.toggle.map("<leader>ub", LazyVim.toggle("background", { values = { "light", "dark" }, name = "背景颜色" }))
+if vim.lsp.inlay_hint then
+  LazyVim.toggle.map("<leader>uh", LazyVim.toggle.inlay_hints, { desc = "切换内联提示" })
+end
+
+-- lazygit
+map("n", "<leader>gg", function()
+  LazyVim.lazygit({ cwd = LazyVim.root.git() })
+end, { desc = "Lazygit（根目录）" })
+map("n", "<leader>gG", function()
+  LazyVim.lazygit()
+end, { desc = "Lazygit（当前工作目录）" })
+map("n", "<leader>gb", LazyVim.lazygit.blame_line, { desc = "Git 责任追踪行" })
+map("n", "<leader>gB", LazyVim.lazygit.browse, { desc = "浏览 Git 仓库" })
+
+map("n", "<leader>gf", function()
+  local git_path = vim.api.nvim_buf_get_name(0)
+  LazyVim.lazygit({ args = { "-f", vim.trim(git_path) } })
+end, { desc = "Lazygit 当前文件历史" })
+
+map("n", "<leader>gl", function()
+  LazyVim.lazygit({ args = { "log" }, cwd = LazyVim.root.git() })
+end, { desc = "Lazygit Git 日志" })
+map("n", "<leader>gL", function()
+  LazyVim.lazygit({ args = { "log" } })
+end, { desc = "Lazygit 日志（当前工作目录）" })
+
+-- 退出所有
+map("n", "<leader>qq", "<cmd>qa<cr>", { desc = "退出所有" })
+
+-- 高亮光标下的内容
+map("n", "<leader>ui", vim.show_pos, { desc = "检查位置" })
+map("n", "<leader>uI", "<cmd>InspectTree<cr>", { desc = "检查树" })
+
+-- LazyVim 更新日志
+map("n", "<leader>L", function()
+  LazyVim.news.changelog()
+end, { desc = "LazyVim 更新日志" })
+
+-- 浮动终端
+local lazyterm = function()
+  LazyVim.terminal(nil, { cwd = LazyVim.root() })
+end
+map("n", "<leader>ft", lazyterm, { desc = "终端（根目录）" })
+map("n", "<leader>fT", function()
+  LazyVim.terminal()
+end, { desc = "终端（当前工作目录）" })
+map("n", "<c-/>", lazyterm, { desc = "终端（根目录）" })
+map("n", "<c-_>", lazyterm, { desc = "which_key_ignore" })
+
+-- 终端映射
+map("t", "<esc><esc>", "<c-\\><c-n>", { desc = "进入普通模式" })
+map("t", "<C-h>", "<cmd>wincmd h<cr>", { desc = "切换到左侧窗口" })
+map("t", "<C-j>", "<cmd>wincmd j<cr>", { desc = "切换到下方窗口" })
+map("t", "<C-k>", "<cmd>wincmd k<cr>", { desc = "切换到上方窗口" })
+map("t", "<C-l>", "<cmd>wincmd l<cr>", { desc = "切换到右侧窗口" })
+map("t", "<C-/>", "<cmd>close<cr>", { desc = "隐藏终端" })
+map("t", "<c-_>", "<cmd>close<cr>", { desc = "which_key_ignore" })
+
+-- 窗口
+map("n", "<leader>w", "<c-w>", { desc = "窗口", remap = true })
+map("n", "<leader>-", "<C-W>s", { desc = "下方分割窗口", remap = true })
+map("n", "<leader>|", "<C-W>v", { desc = "右侧分割窗口", remap = true })
+map("n", "<leader>wd", "<C-W>c", { desc = "删除窗口", remap = true })
+LazyVim.toggle.map("<leader>wm", LazyVim.toggle.maximize)
+
+-- 标签页
+map("n", "<leader><tab>l", "<cmd>tablast<cr>", { desc = "最后一个标签" })
+map("n", "<leader><tab>o", "<cmd>tabonly<cr>", { desc = "关闭其他标签" })
+map("n", "<leader><tab>f", "<cmd>tabfirst<cr>", { desc = "第一个标签" })
+map("n", "<leader><tab><tab>", "<cmd>tabnew<cr>", { desc = "新建标签" })
+map("n", "<leader><tab>]", "<cmd>tabnext<cr>", { desc = "下一个标签" })
+map("n", "<leader><tab>d", "<cmd>tabclose<cr>", { desc = "关闭标签" })
+map("n", "<leader><tab>[", "<cmd>tabprevious<cr>", { desc = "上一个标签" })
