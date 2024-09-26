@@ -202,3 +202,8 @@ map("n", "<leader><tab><tab>", "<cmd>tabnew<cr>", { desc = "新建标签" })
 map("n", "<leader><tab>]", "<cmd>tabnext<cr>", { desc = "下一个标签" })
 map("n", "<leader><tab>d", "<cmd>tabclose<cr>", { desc = "关闭标签" })
 map("n", "<leader><tab>[", "<cmd>tabprevious<cr>", { desc = "上一个标签" })
+
+-- 打开浏览器
+map({ "n", "i" }, "<leader>bb", "<cmd>LiveServerStart<cr>", { desc = "打开浏览器", remap = true })
+-- Emmet 补全快捷键
+map({ "n", "i" }, "<C-e>", "<plug>(emmet-expand-abbr)<cr>", { desc = "Emmet补全", remap = true })
