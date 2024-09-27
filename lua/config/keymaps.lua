@@ -204,6 +204,8 @@ map("n", "<leader><tab>d", "<cmd>tabclose<cr>", { desc = "关闭标签" })
 map("n", "<leader><tab>[", "<cmd>tabprevious<cr>", { desc = "上一个标签" })
 
 -- 打开浏览器
-map({ "n", "i" }, "<leader>bb", "<cmd>LiveServerStart<cr>", { desc = "打开浏览器", remap = true })
+map({ "n", "i" }, "<C-i>", "<cmd>LiveServerStart<cr>", { desc = "打开浏览器", remap = true })
 -- Emmet 补全快捷键
 map({ "n", "i" }, "<C-e>", "<plug>(emmet-expand-abbr)<cr>", { desc = "Emmet补全", remap = true })
+-- 打开mardown
+map({ "n", "i" }, "<C-m>", "<cmd>MarkdownPreview<cr>", { desc = "打开markdown", remap = true })
