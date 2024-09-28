@@ -1,3 +1,4 @@
+-- tokyonight 主题
 return {
   "folke/tokyonight.nvim",
   opts = {
