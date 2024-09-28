@@ -11,7 +11,7 @@ return {
       config = function()
         require("luasnip.loaders.from_vscode").lazy_load()
         -- 插入的代码片段  位置。
-        require("luasnip.loaders.from_lua").load({
+        require("luasnip.loaders.from_lua").lazy_load({
           paths = { "~/.config/nvim/lua/plugins/snips" },
         })
       end,
@@ -34,5 +34,31 @@ return {
   opts = {
     history = true,
     delete_check_events = "TextChanged",
+  },
+  -- 解决tab跳转的问题
+  keys = {
+    {
+      "<tab>",
+      function()
+        return require("luasnip").jumpable(1) and "<Plug>luasnip-jump-next" or "<tab>"
+      end,
+      expr = true,
+      silent = true,
+      mode = "i",
+    },
+    {
+      "<tab>",
+      function()
+        require("luasnip").jump(1)
+      end,
+      mode = "i",
+    },
+    {
+      "s-tab",
+      function()
+        require("luasnip").jump(-1)
+      end,
+      mode = { "i", "s" },
+    },
   },
 }
