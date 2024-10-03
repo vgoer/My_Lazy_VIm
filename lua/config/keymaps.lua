@@ -217,3 +217,5 @@ map("n", "<leader><F5>", vim.cmd.UndotreeToggle, { desc = "撤销可视化" })
 
 -- esc
 map("i", "jk", "<ESC>", { desc = "esc退出" })
+
+-- 分割窗口

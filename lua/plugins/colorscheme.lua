@@ -2,7 +2,8 @@ return {
   {
     "LazyVim/Lazyvim",
     opts = {
-      colorscheme = "tokyonight-moon",
+      -- colorscheme = "tokyonight-moon",
+      colorscheme = "catppuccin",
     },
   },
   {
@@ -14,4 +15,5 @@ return {
   {
     "savq/melange-nvim",
   },
+  { "catppuccin/nvim", name = "catppuccin", priority = 1000 },
 }
