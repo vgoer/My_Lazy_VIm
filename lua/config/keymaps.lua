@@ -211,3 +211,6 @@ map({ "n", "i" }, "<C-e>", "<plug>(emmet-expand-abbr)<cr>", { desc = "Emmet补�
 map({ "n", "i" }, "<C-m>", "<cmd>MarkdownPreview<cr>", { desc = "打开markdown", remap = true })
 -- 撤销可视化快捷键
 map("n", "<leader><F5>", vim.cmd.UndotreeToggle, { desc = "撤销可视化" })
+
+-- esc
+map("i", "jk", "<ESC>", { desc = "esc退出" })
